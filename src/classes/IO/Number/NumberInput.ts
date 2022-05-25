@@ -2,6 +2,7 @@ import { NodeInput } from '../NodeInput';
 import type { Node } from '../../Node';
 import {IOType} from "../../../types/IO";
 import InputUIDataStore from "../../../store/data/InputUIDataStore";
+import {generateUUID} from "../../../utils/generateUUID";
 
 export class NumberInput extends NodeInput {
     UIData: InputUIDataStore

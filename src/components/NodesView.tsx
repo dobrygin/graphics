@@ -17,16 +17,6 @@ import { BitmapChannelCombiner } from '../classes/nodes/imageUtils/BitmapChannel
 import { NumberMath } from '../classes/math/NumberMath';
 import {Blend} from "../classes/nodes/mix/Blend";
 import '../global/styles/index.css';
-import { Group } from './generic/view/Group';
-import {
-  NodeElement,
-  NodeElementHeader,
-  NodeElementHeaderIcon,
-  NodeElementHeaderTitle
-} from "./generic/view/NodeView/styles";
-import { ArrowDown } from './icons/ArrowDown';
-import NodeView from './generic/view/NodeView';
-import Slider from './controls/slider';
 
 export const NodesView = observer(() => {
 

@@ -34,6 +34,7 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
           // </div>
 
           return <InputProperty
+            id={input.id}
             key={i}
             onMouseUp={() => onKeyUp(input)}
             onMouseDown={() => onKeyDown(input)}
@@ -51,6 +52,7 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
           // </div>
 
           return <InputProperty
+              id={input.id}
               key={i}
               onMouseUp={() => onKeyUp(input)}
               onMouseDown={() => onKeyDown(input)}

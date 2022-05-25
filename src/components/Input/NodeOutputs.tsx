@@ -31,6 +31,7 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
 
           return (
             <OutputProperty
+              id={output.id}
               key={i}
               onMouseUp={() => onKeyUp(output)}
               onMouseDown={() => onKeyDown(output)}
@@ -43,6 +44,7 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
 
         if (output instanceof NumberOutput) {
           return <OutputProperty
+            id={output.id}
             key={i}
             onMouseUp={() => onKeyUp(output)}
             onMouseDown={() => onKeyDown(output)}
