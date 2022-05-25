@@ -42,8 +42,9 @@ export const NodeControls = observer(({ controls }: { controls: Control[] }) => 
       if (control instanceof SliderControl) {
         return (
             <Slider
+                key={i}
             //@ts-ignore
-                title={control.field} onSliderChange={(value) => { console.log(value); control.setValue(value); }} value={control.value} min={control.min} max={control.max} step={control.step} />
+                title={control.UIData.title} onSliderChange={(value) => control.setValue(value)} value={control.value} min={control.min} max={control.max} step={control.step} />
             // {/*<p style={{ fontFamily: 'monospace', margin: 0 }}>*/}
             // {/*  {control.field}*/}
             // {/*  <input*/}

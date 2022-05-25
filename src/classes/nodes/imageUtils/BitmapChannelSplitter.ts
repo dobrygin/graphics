@@ -1,8 +1,6 @@
 import {BitmapInput} from '../../IO/Bitmap/BitmapInput';
-import BitmapOutput from '../../IO/Bitmap/BitmapOutput';
 import {RenderableNode} from '../../Node';
 import {makeObservable, transaction} from 'mobx';
-import {SliderControl} from '../../controls/SliderControl';
 import {generateUUID} from '../../../utils/generateUUID';
 import {IOType} from "../../../types/IO";
 import NumberOutput from '../../IO/Number/NumberOutput';
@@ -13,30 +11,35 @@ export class BitmapChannelSplitter extends RenderableNode {
     title: string = 'RGBA Splitter';
 
     image: BitmapInput = new BitmapInput(
+        {},
         'bitmap',
         this,
         IOType.Bitmap
     );
 
     outR: NumberOutput = new NumberOutput(
+        { title: "Red" },
         'R',
         this,
         IOType.Number,
         `Splitter_R_${this.id}`
     );
     outG: NumberOutput = new NumberOutput(
+        { title: "Green" },
         'G',
         this,
         IOType.Number,
         `Splitter_G_${this.id}`
     );
     outB: NumberOutput = new NumberOutput(
+        { title: "Blue" },
         'B',
         this,
         IOType.Number,
         `Splitter_B_${this.id}`
     );
     outA: NumberOutput = new NumberOutput(
+        { title: "Alpha" },
         'A',
         this,
         IOType.Number,
@@ -47,6 +50,9 @@ export class BitmapChannelSplitter extends RenderableNode {
 
     constructor() {
         super();
+        this.UIData.update({
+            title: 'RGBA Splitter'
+        });
         transaction(() => {
             this.setInputs([this.image]);
             this.setOutputs([this.outR, this.outG, this.outB, this.outA]);

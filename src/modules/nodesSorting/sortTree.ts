@@ -43,6 +43,7 @@ export const sortTree = (firstNode) => {
         if (!sortedLevels[key]) sortedLevels[key] = []
         levels[key].forEach(value => {
             if (sortedLevels[key].indexOf(value) === -1 && used.indexOf(value) === -1) {
+                console.log(value,'value');
                 sortedLevels[key].push(value)
                 used.push(value)
             }
@@ -112,6 +113,7 @@ export const generateUniforms = (nodes) => {
     const uniforms = {};
 
     nodes.forEach((node, i) => {
+        console.log(node, node.controls);
         const curUniforms = {};
         node.controls.forEach(control => {
             control.object = uniforms;

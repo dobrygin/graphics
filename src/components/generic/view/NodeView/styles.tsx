@@ -1,15 +1,17 @@
 import { styled } from "@compiled/react";
 import {color, padding} from "../../../../global/styles";
 
-export const NodeElement = styled.div`
+export const NodeElement = styled.div<{ width: number, x: number, y: number }>`
   margin-top: 8px;
   margin-left: 8px;
     //height: 100px;
     background-color: ${color.nodes.fill};
     border: 1px solid ${color.nodes.stroke};
     min-width: 195px;
-    width: 195px;
+    width: ${p => p.width}px;
     border-radius: 5px 5px 5px 5px;
+  
+    transform: translate(${(p) => p.x}px, ${(p) => p.y}px);
 `;
 
 export const NodeElementHeader = styled.div`

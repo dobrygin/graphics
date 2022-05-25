@@ -83,11 +83,6 @@ export const NodesView = observer(() => {
       <button onClick={() => addNode(BitmapChannelSplitter)}>add ch splitter</button>
       <button onClick={() => addNode(BitmapChannelCombiner)}>add ch combiner</button>
       <button onClick={() => addNode(NumberMath)}>add number math</button>
-      <NodeView title={"Number"}>
-        <Group>
-          {/*<Slider />*/}
-        </Group>
-      </NodeView>
       {/*<Group>A</Group>*/}
       {/*<Group>B</Group>*/}
       {/*<Group>C</Group>*/}

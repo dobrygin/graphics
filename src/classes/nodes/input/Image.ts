@@ -8,7 +8,7 @@ export class Image extends InputNode {
   id = generateUUID();
   title = "Image Node";
 
-  bitmap = new BitmapOutput('bitmap', this, IOType.Bitmap, `tex_color_${this.id}`);
+  bitmap = new BitmapOutput({ title: 'Bitmap' }, 'bitmap', this, IOType.Bitmap, `tex_color_${this.id}`);
 
   uniforms = {
     [`tex_${this.id}`]: false,
@@ -20,11 +20,14 @@ export class Image extends InputNode {
 
   constructor() {
     super();
+    this.UIData.update({
+      title: 'Image'
+    });
     this.setControls([
-        new SliderControl(this.uniforms, `width_tex_${this.id}`, 1, -2048, 2048),
-        new SliderControl(this.uniforms, `height_tex_${this.id}`, 1, -2048, 2048),
-        new SliderControl(this.uniforms, `image_transform_X_${this.id}`, 1, -100, 100),
-        new SliderControl(this.uniforms, `image_transform_Y_${this.id}`, 1, -100, 100),
+        new SliderControl({ title: 'Width' }, this.uniforms, `width_tex_${this.id}`, 1, -2048, 2048),
+        new SliderControl({ title: 'Height' }, this.uniforms, `height_tex_${this.id}`, 1, -2048, 2048),
+        new SliderControl({ title: 'Position X' }, this.uniforms, `image_transform_X_${this.id}`, 1, -100, 100),
+        new SliderControl({ title: 'Position Y' }, this.uniforms, `image_transform_Y_${this.id}`, 1, -100, 100),
     ]);
     this.setOutputs([this.bitmap]);
   }

@@ -1,11 +1,8 @@
-import {BitmapInput} from '../../IO/Bitmap/BitmapInput';
 import BitmapOutput from '../../IO/Bitmap/BitmapOutput';
 import {RenderableNode} from '../../Node';
 import {makeObservable, transaction} from 'mobx';
-import {SliderControl} from '../../controls/SliderControl';
 import {generateUUID} from '../../../utils/generateUUID';
 import {IOType} from "../../../types/IO";
-import NumberOutput from '../../IO/Number/NumberOutput';
 import {NumberInput} from "../../IO/Number/NumberInput";
 
 export class BitmapChannelCombiner extends RenderableNode {
@@ -14,6 +11,7 @@ export class BitmapChannelCombiner extends RenderableNode {
     title: string = 'RGBA Combiner';
 
     image: BitmapOutput = new BitmapOutput(
+        {},
         'bitmap',
         this,
         IOType.Bitmap,
@@ -21,21 +19,25 @@ export class BitmapChannelCombiner extends RenderableNode {
     );
 
     inR: NumberInput = new NumberInput(
+        {},
         'R',
         this,
         IOType.Number,
     );
     inG: NumberInput = new NumberInput(
+        {},
         'G',
         this,
         IOType.Number,
     );
     inB: NumberInput = new NumberInput(
+        {},
         'B',
         this,
         IOType.Number,
     );
     inA: NumberInput = new NumberInput(
+        {},
         'A',
         this,
         IOType.Number,
@@ -45,6 +47,10 @@ export class BitmapChannelCombiner extends RenderableNode {
 
     constructor() {
         super();
+        this.UIData.update({
+            title: 'RGBA Combiner'
+        });
+
         transaction(() => {
             this.setInputs([this.inR, this.inG, this.inB, this.inA]);
             this.setOutputs([this.image]);

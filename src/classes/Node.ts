@@ -45,10 +45,13 @@ export class RenderableNode extends Node {
 // TODO: rename to OutputNode?
 
 export class OutputNode extends Node {
-  input: BitmapInput = new BitmapInput('bitmap', this, IOType.Bitmap);
+  input: BitmapInput = new BitmapInput({ title: 'Bitmap' },'bitmap', this, IOType.Bitmap);
 
   constructor() {
     super();
+    this.UIData.update({
+      title: 'Output'
+    });
     this.setInputs([this.input]);
   }
 }

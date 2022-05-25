@@ -5,13 +5,17 @@ import {Node} from '../../Node';
 import {IOType} from "../../../types/IO";
 import {action, makeObservable, observable, reaction} from "mobx";
 import {FORMATS, Texture} from "pixi.js";
+import OutputUIDataStore from "../../../store/data/OutputUIDataStore";
 
 export default class BitmapOutput extends NodeOutput {
   bitmap: Bitmap | ChunkedBitmap | null = null;
   texture: Texture = null;
+  UIData: OutputUIDataStore;
 
-  constructor(public name: string, node: Node, ioType: IOType, shaderResultName: string) {
+  constructor(uiData: Partial<OutputUIDataStore>, public name: string, node: Node, ioType: IOType, shaderResultName: string) {
     super();
+
+    this.UIData = new OutputUIDataStore(uiData);
 
     this.setNode(node)
     this.ioType = ioType;

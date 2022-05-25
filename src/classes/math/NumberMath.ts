@@ -40,8 +40,8 @@ export class NumberMath extends RenderableNode {
         super();
         transaction(() => {
             this.setControls([
-                new SliderControl(this.uniforms, `first_num_${this.id}`, 0.01, -4.0, 4.0),
-                new SliderControl(this.uniforms, `second_num_${this.id}`, 0.01, -4.0, 4.0),
+                new SliderControl({ title: 'First number' }, this.uniforms, `first_num_${this.id}`, 0.01, -4.0, 4.0),
+                new SliderControl({ title: 'Second number' }, this.uniforms, `second_num_${this.id}`, 0.01, -4.0, 4.0),
                 new SelectControl(
                     this.uniforms,
                     `selectControl_Math_Operation_${this.id}`,

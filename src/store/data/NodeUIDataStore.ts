@@ -18,7 +18,7 @@ export default class NodeUIDataStore {
           title: 'NodeDefaultTitle',
           inputs: [],
           outputs: [],
-          width: 300,
+          width: 195,
           height: 300,
         },
         data

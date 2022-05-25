@@ -11,11 +11,13 @@ export class BCS extends RenderableNode {
   id = generateUUID();
   title: string = 'BCS';
   image: BitmapInput = new BitmapInput(
+      { title: 'Bitmap' },
       'bitmap',
       this,
       IOType.Bitmap
   );
   output: BitmapOutput = new BitmapOutput(
+      { title: 'Bitmap' },
       'bitmap',
       this,
       IOType.Bitmap,
@@ -23,18 +25,21 @@ export class BCS extends RenderableNode {
   );
 
   contrast: NumberInput = new NumberInput(
+      { title: 'Contrast' },
       'contrast',
       this,
       IOType.Number,
   )
 
   brightness: NumberInput = new NumberInput(
+      { title: 'Brightness' },
       'brightness',
       this,
       IOType.Number,
   )
 
   saturation: NumberInput = new NumberInput(
+      { title: 'Saturation' },
       'saturation',
       this,
       IOType.Number,
@@ -48,14 +53,18 @@ export class BCS extends RenderableNode {
 
   constructor() {
     super();
+    this.UIData.update({
+      title: 'Brightness / Contrast / Saturation'
+    });
+
     transaction(() => {
       this.setInputs([this.image, this.brightness, this.contrast, this.saturation]);
       this.setOutputs([this.output]);
     });
     this.setControls([
-      new SliderControl(this.uniforms, `contrast_BCS_${this.id}`, 0.1, 0.0, 10.0),
-      new SliderControl(this.uniforms, `brightness_BCS_${this.id}`, 0.1, -1.0, 1.0),
-      new SliderControl(this.uniforms, `saturation_BCS_${this.id}`, 0.1, 0.0, 10.0),
+      new SliderControl({ title: 'Contrast' }, this.uniforms, `contrast_BCS_${this.id}`, 0.1, 0.0, 10.0),
+      new SliderControl({ title: 'Brightness' }, this.uniforms, `brightness_BCS_${this.id}`, 0.1, -1.0, 1.0),
+      new SliderControl({ title: 'Saturation' }, this.uniforms, `saturation_BCS_${this.id}`, 0.1, 0.0, 10.0),
     ]);
     makeObservable(this, {
     });

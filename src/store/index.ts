@@ -63,7 +63,11 @@ export default class Store {
 
       const sortedNodes = sortTree(this.outputNode)
 
+      console.log(sortedNodes, '1');
+
       sortedNodes.splice(sortedNodes.length - 1, 1)
+
+      console.log(sortedNodes, '2');
 
       const uniforms = generateUniforms(sortedNodes);
       const shader = generateShader(sortedNodes, this.outputNode)

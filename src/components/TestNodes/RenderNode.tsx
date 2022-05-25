@@ -10,7 +10,7 @@ import { Group } from '../generic/view/Group';
 export const RenderNode = observer(({ node }: { node: Node }) => {
   return (
       // @ts-ignore
-      <NodeView title={node.title}>
+      <NodeView UIData={node.UIData} width={node.UIData.width} title={node.UIData.title}>
         <Group>
           <NodeInputs inputs={node.inputs} />
         </Group>

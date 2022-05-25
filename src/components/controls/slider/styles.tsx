@@ -8,13 +8,14 @@ export const SliderElement = styled.div`
   background-color: ${() => color.IO.fill};
   overflow: hidden;
   position: relative;
+  border: 1px solid ${() => color.IO.stroke};
 `
 
 export const SliderElementBox = styled.div`
   width: 100%;
   display: flex;
   & + & {
-    margin-top: 6px;
+    margin-top: 4px;
   }
 `
 
@@ -41,7 +42,7 @@ export const SliderValuesTitle = styled.div`
 `
 
 export const SliderValuesValue = styled.div`
-  color: ${() => color.text.white};
+  color: #BBBBBB;
   flex: 1;
   height: 100%;
   line-height: 24px;

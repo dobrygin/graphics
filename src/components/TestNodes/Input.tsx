@@ -14,7 +14,6 @@ export const InputNode = observer(({ node }: { node: Image }) => {
         // @ts-ignore
         inkjet.decode(buf, (_, b) => {
           node.bitmap.setBitmap(new Bitmap(b.data, b.width, b.height))
-          console.log(b);
         })
       });
     }
@@ -23,7 +22,7 @@ export const InputNode = observer(({ node }: { node: Image }) => {
     }
   }, [node]);
   return (
-    <NodeView title={"Image"}>
+    <NodeView UIData={node.UIData} width={node.UIData.width} title={node.UIData.title}>
       <Group>
           <input type="file" onChange={(e) => setImage(e.target.files[0])} />
       </Group>

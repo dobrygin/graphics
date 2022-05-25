@@ -12,18 +12,21 @@ export class Blend extends RenderableNode {
     title: string = 'Blend';
 
     over: BitmapInput = new BitmapInput(
+        {},
         'over',
         this,
         IOType.Bitmap
     );
 
     under: BitmapInput = new BitmapInput(
+        {},
         'under',
         this,
         IOType.Bitmap
     );
 
     output: BitmapOutput = new BitmapOutput(
+        {},
         'out',
         this,
         IOType.Bitmap,
@@ -34,6 +37,9 @@ export class Blend extends RenderableNode {
 
     constructor() {
         super();
+        this.UIData.update({
+            title: 'Blend'
+        });
         transaction(() => {
             this.setControls([
                 new SelectControl(

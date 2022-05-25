@@ -101,7 +101,7 @@ export const AppT: FC<{}> = () => {
           output.input.connectTo(bcs.output);
           inputImg.bitmap.connectTo(bcs.image);
 
-          const a = await output.requestProcessing();
+          // const a = await output.requestProcessing();
 
           // @ts-ignore
           window.output = output;
