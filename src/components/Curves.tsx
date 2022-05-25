@@ -2,10 +2,11 @@ import React, {useEffect, useRef} from "react";
 import {useState} from "react";
 import {useStore} from "../store/provider/StoreProvider";
 import {reaction} from "mobx";
+import {clamp} from "../utils/clamp";
 
 const Curves = () => {
-    const [width, setWidth] = useState(window.innerWidth);
-    const [height, setHeight] = useState(window.innerHeight);
+    const [width, setWidth] = useState(window.innerWidth * window.devicePixelRatio);
+    const [height, setHeight] = useState(window.innerHeight * window.devicePixelRatio);
 
     const canvas = useRef<HTMLCanvasElement>();
 
@@ -20,8 +21,10 @@ const Curves = () => {
                 positions: store.nodes.map(node => node.UIData.y + node.UIData.x)
             }),
             ({ connectedOutputs }) => {
+                console.log(connectedOutputs)
                 ctx.clearRect(0,0,width, height)
                 connectedOutputs.forEach(output => {
+                    if(!output.isConnected) {return;}
                     // @ts-ignore
                     console.log(output.id, output.connectedTo.id);
                     // @ts-ignore
@@ -38,9 +41,12 @@ const Curves = () => {
                     ctx.moveTo(left, top);
                     // ctx.lineTo(l, t);
 
-                    ctx.bezierCurveTo(left + 70, top + 70, l - 70, t - 70, l , t);
+                    const e = clamp(Math.sqrt(Math.pow(left - l, 2) + Math.pow(top - t, 2)) / 300, 0, 1) * 120;
+
+                    ctx.bezierCurveTo(left + e, top + 0, l - e, t - 0, l , t);
 
                     ctx.strokeStyle='rgba(255,255,255,255)';
+                    ctx.lineWidth = 2;
 
                     ctx.stroke();
                     ctx.closePath();
