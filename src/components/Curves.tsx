@@ -25,9 +25,7 @@ const Curves = () => {
                 ctx.clearRect(0,0,width, height)
                 connectedOutputs.forEach(output => {
                     if(!output.isConnected) {return;}
-                    // @ts-ignore
-                    console.log(output.id, output.connectedTo.id);
-                    // @ts-ignore
+                    //@ts-ignore
                     const outputElement = document.querySelector(`#${output.connectedTo.id}`);
                     const bound = outputElement.getBoundingClientRect();
                     const left = bound.x + bound.width;
@@ -45,7 +43,7 @@ const Curves = () => {
 
                     ctx.bezierCurveTo(left + e, top + 0, l - e, t - 0, l , t);
 
-                    ctx.strokeStyle='rgba(255,255,255,255)';
+                    ctx.strokeStyle='rgba(120,120,120,255)';
                     ctx.lineWidth = 2;
 
                     ctx.stroke();
