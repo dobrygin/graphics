@@ -2,6 +2,7 @@ import { styled } from "@compiled/react";
 import {color, padding} from "../../../../global/styles";
 
 export const NodeElement = styled.div<{ width: number, x: number, y: number }>`
+  position: absolute;
   margin-top: 8px;
   margin-left: 8px;
     //height: 100px;

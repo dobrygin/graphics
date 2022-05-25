@@ -11,7 +11,7 @@ export class BitmapChannelSplitter extends RenderableNode {
     title: string = 'RGBA Splitter';
 
     image: BitmapInput = new BitmapInput(
-        {},
+        { title: "Bitmap" },
         'bitmap',
         this,
         IOType.Bitmap

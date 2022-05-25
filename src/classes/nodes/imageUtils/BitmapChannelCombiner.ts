@@ -11,7 +11,7 @@ export class BitmapChannelCombiner extends RenderableNode {
     title: string = 'RGBA Combiner';
 
     image: BitmapOutput = new BitmapOutput(
-        {},
+        { title: 'Bitmap' },
         'bitmap',
         this,
         IOType.Bitmap,
@@ -19,25 +19,25 @@ export class BitmapChannelCombiner extends RenderableNode {
     );
 
     inR: NumberInput = new NumberInput(
-        {},
+        { title: 'Red' },
         'R',
         this,
         IOType.Number,
     );
     inG: NumberInput = new NumberInput(
-        {},
+        { title: 'Green' },
         'G',
         this,
         IOType.Number,
     );
     inB: NumberInput = new NumberInput(
-        {},
+        { title: 'Blue' },
         'B',
         this,
         IOType.Number,
     );
     inA: NumberInput = new NumberInput(
-        {},
+        { title: 'Alpha' },
         'A',
         this,
         IOType.Number,
