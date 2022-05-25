@@ -1,10 +1,5 @@
 import {Node} from "../../classes/Node";
-import ImageContainer from "../../classes/containers/ImageContainer";
-import {FORMATS, Texture} from "pixi.js";
-import {BCS} from "../../classes/nodes/colorCorrection/BCS";
 import {Image} from "../../classes/nodes/input/Image";
-import {BitmapInput} from "../../classes/IO/Bitmap/BitmapInput";
-import {NumberInput} from "../../classes/IO/Number/NumberInput";
 import BitmapOutput from "../../classes/IO/Bitmap/BitmapOutput";
 import NumberOutput from "../../classes/IO/Number/NumberOutput";
 
@@ -43,7 +38,6 @@ export const sortTree = (firstNode) => {
         if (!sortedLevels[key]) sortedLevels[key] = []
         levels[key].forEach(value => {
             if (sortedLevels[key].indexOf(value) === -1 && used.indexOf(value) === -1) {
-                console.log(value,'value');
                 sortedLevels[key].push(value)
                 used.push(value)
             }

@@ -13,18 +13,21 @@ export class NumberMath extends RenderableNode {
     title: string = 'Number Math';
 
     firstNumIn: NumberInput = new NumberInput(
+        { title: 'First number' },
         'number',
         this,
         IOType.Bitmap
     );
 
     secondNumIn: NumberInput = new NumberInput(
+        { title: 'Second number' },
         'number',
         this,
         IOType.Bitmap
     );
 
     numberOut: NumberOutput = new NumberOutput(
+        { title: 'Number' },
         'number',
         this,
         IOType.Number,
@@ -38,6 +41,9 @@ export class NumberMath extends RenderableNode {
 
     constructor() {
         super();
+        this.UIData.update({
+            title: 'Number math'
+        });
         transaction(() => {
             this.setControls([
                 new SliderControl({ title: 'First number' }, this.uniforms, `first_num_${this.id}`, 0.01, -4.0, 4.0),
