@@ -17,26 +17,18 @@ import { BitmapChannelCombiner } from '../classes/nodes/imageUtils/BitmapChannel
 import { NumberMath } from '../classes/math/NumberMath';
 import {Blend} from "../classes/nodes/mix/Blend";
 import '../global/styles/index.css';
-import { Group } from './generic/view/Group';
-import {
-  NodeElement,
-  NodeElementHeader,
-  NodeElementHeaderIcon,
-  NodeElementHeaderTitle
-} from "./generic/view/NodeView/styles";
-import { ArrowDown } from './icons/ArrowDown';
-import NodeView from './generic/view/NodeView';
-import Slider from './controls/slider';
 
 export const NodesView = observer(() => {
 
   const store = useStore();
 
-  const isPointerShown = store.isPointerShown;
-
   const addNode = useCallback((node: any) => {
     store.addNode(new node())
   }, [store]);
+
+  useEffect(() => {
+    document.body.style.cursor = store.pointerManager.cursor;
+  }, [store.pointerManager.cursor])
 
   useEffect(() => {
     // @ts-ignore
@@ -76,7 +68,7 @@ export const NodesView = observer(() => {
   }, []);
 
   return (
-    <div style={{ cursor: isPointerShown ? 'default' : 'none'}}>
+    <div style={{ zIndex: '1', position: 'relative' }}>
       <button onClick={() => addNode(Image)}>add img</button>
       <button onClick={() => addNode(Blend)}>add blend</button>
       <button onClick={() => addNode(BCS)}>add bcs</button>

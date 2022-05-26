@@ -48,14 +48,14 @@ const Slider = ({ title = "Title", step = 0.01, min = -2048, max = 2048, value =
             setTimeout(() => {
                 dontgo.current = false;
             });
-            store.setIsPointerShown(true);
+            store.pointerManager.setIsPointerShown(true);
             pointerStartedX.current = 0;
             window.removeEventListener('mouseup', onPointerUpRef.current);
             window.removeEventListener('mousemove', onPointerMoveRef.current);
         };
 
         onPointerDownRef.current = (e) => {
-            store.setIsPointerShown(false);
+            store.pointerManager.setIsPointerShown(false);
             valueWhenStarted.current = curVal.current;
             pointerStartedX.current = e.clientX;
             window.addEventListener('mouseup', onPointerUpRef.current);

@@ -14,12 +14,10 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
   const store = useStore();
 
   const onKeyDown = useCallback((e) => {
-    console.log(e);
     store.selectIO(e);
   }, [inputs]);
 
   const onKeyUp = useCallback((e) => {
-    console.log(e);
     store.connectIO(e);
   }, [inputs]);
 
@@ -27,34 +25,24 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
     <>
       {inputs.map((input, i) => {
         if (input instanceof BitmapInput) {
-          // return <div key={i} onClick={() => {}}>
-          //   {!!input.connectedTo ? 'connected' : ''} {input.UIData.title}
-          //   <button onClick={() => store.selectIO(input)}>select</button>
-          //   <button onClick={() => store.connectIO(input)}>connect</button>
-          // </div>
-
           return <InputProperty
+            id={input.id}
             key={i}
             onMouseUp={() => onKeyUp(input)}
             onMouseDown={() => onKeyDown(input)}
-            isConnected={input.isConnected}
+            isConnected={input.isConnected || input === store.selectedIO}
             color={color.types.bitmap.secondary}
             connectedColor={color.types.bitmap.accent}
             title={input.UIData.title} />
         }
 
         if (input instanceof NumberInput) {
-          // return <div key={i} onClick={() => {}}>
-          //   {!!input.connectedTo ? 'connected' : ''} {input.UIData.title}
-          //   <button onClick={() => store.selectIO(input)}>select</button>
-          //   <button onClick={() => store.connectIO(input)}>connect</button>
-          // </div>
-
           return <InputProperty
+              id={input.id}
               key={i}
               onMouseUp={() => onKeyUp(input)}
               onMouseDown={() => onKeyDown(input)}
-              isConnected={input.isConnected}
+              isConnected={input.isConnected || input === store.selectedIO}
               color={color.number.secondary}
               connectedColor={color.number.accent}
               title={input.UIData.title} />

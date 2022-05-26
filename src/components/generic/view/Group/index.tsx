@@ -1,7 +1,7 @@
 import {styled} from "@compiled/react";
 
 export const Group = styled.div`
-  overflow: auto;
+  overflow: visible;
   
   & + & {
     margin-top: 6px;

@@ -15,7 +15,7 @@ export const SliderElementBox = styled.div`
   width: 100%;
   display: flex;
   & + & {
-    margin-top: 4px;
+    margin-top: 2px;
   }
 `
 

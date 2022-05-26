@@ -6,6 +6,7 @@ import {IOType} from "../../../types/IO";
 import {action, makeObservable, observable, reaction} from "mobx";
 import {FORMATS, Texture} from "pixi.js";
 import OutputUIDataStore from "../../../store/data/OutputUIDataStore";
+import {generateUUID} from "../../../utils/generateUUID";
 
 export default class BitmapOutput extends NodeOutput {
   bitmap: Bitmap | ChunkedBitmap | null = null;

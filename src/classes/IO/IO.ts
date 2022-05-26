@@ -1,6 +1,7 @@
 import { action, makeObservable, observable, transaction } from 'mobx';
 import type {Node} from "../Node";
 import {IOType} from "../../types/IO";
+import {generateUUID} from "../../utils/generateUUID";
 
 type InvertIO<T> = T extends Output ? Input : Output;
 
@@ -27,7 +28,8 @@ export default class IO<T> extends IOData<T> {
 }
 
 export class Input extends IO<Input> {
-  connectedTo: IO<Output> | null;
+  id = `IO${generateUUID()}`;
+  connectedTo: Output | null;
 
   constructor() {
     super();
@@ -64,12 +66,13 @@ export class Input extends IO<Input> {
     this._disconnect();
   }
 
-  _connectTo(io: IO<Output>) {
+  _connectTo(io: Output) {
     this.connectedTo = io;
   }
 }
 
 export class Output extends IO<Output> {
+  id = `IO${generateUUID()}`;
   connectedTo: IO<Input>[] | null;
 
   constructor() {
