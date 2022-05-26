@@ -4,7 +4,7 @@ import {useStore} from "../store/provider/StoreProvider";
 import {reaction} from "mobx";
 import {clamp} from "../utils/clamp";
 
-const Curves = () => {
+const Spaghetti = () => {
     const [width, setWidth] = useState(window.innerWidth * window.devicePixelRatio);
     const [height, setHeight] = useState(window.innerHeight * window.devicePixelRatio);
 
@@ -15,6 +15,7 @@ const Curves = () => {
     useEffect(() => {
         if (!canvas.current) return;
         const ctx = canvas.current.getContext('2d');
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         const reset = reaction(
             () => ({
                 connectedOutputs: store.nodes.map(a => a.inputs).flat().map(e => (e.isConnected && e, e)).flat(),
@@ -44,7 +45,7 @@ const Curves = () => {
                     ctx.bezierCurveTo(left + e, top + 0, l - e, t - 0, l , t);
 
                     ctx.strokeStyle='rgba(120,120,120,255)';
-                    ctx.lineWidth = 2;
+                    ctx.lineWidth = 3;
 
                     ctx.stroke();
                     ctx.closePath();
@@ -54,10 +55,12 @@ const Curves = () => {
             { fireImmediately: true }
         );
 
+        // ctx.scale(1 / window.innerWidth, window.innerHeight);
+
         return () => reset();
     }, [canvas]);
 
-    return <canvas ref={canvas} width={width} height={height}/>;
+    return <canvas style={{ pointerEvents:'none', width: '100%', height: '100%', position: 'absolute', zIndex: 99, top: 0, left: 0, }} ref={canvas} width={width} height={height}/>;
 };
 
-export default Curves;
+export default Spaghetti;
