@@ -60,7 +60,7 @@ const Spaghetti = () => {
         return () => reset();
     }, [canvas]);
 
-    return <canvas style={{ pointerEvents:'none', width: '100%', height: '100%', position: 'absolute', zIndex: 99, top: 0, left: 0, }} ref={canvas} width={width} height={height}/>;
+    return <canvas style={{ pointerEvents:'none', width: '100%', height: '100%', position: 'absolute', zIndex: 0, top: 0, left: 0, }} ref={canvas} width={width} height={height}/>;
 };
 
 export default Spaghetti;

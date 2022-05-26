@@ -66,7 +66,7 @@ export const NodesView = observer(() => {
   }, []);
 
   return (
-    <div style={{ cursor: isPointerShown ? 'default' : 'none'}}>
+    <div style={{ cursor: isPointerShown ? 'default' : 'none', zIndex: '1', position: 'relative' }}>
       <button onClick={() => addNode(Image)}>add img</button>
       <button onClick={() => addNode(Blend)}>add blend</button>
       <button onClick={() => addNode(BCS)}>add bcs</button>
