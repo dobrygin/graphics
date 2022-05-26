@@ -1,64 +1,145 @@
-import React, {useEffect, useRef} from "react";
-import {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useStore} from "../store/provider/StoreProvider";
-import {reaction} from "mobx";
-import {clamp} from "../utils/clamp";
+import {reaction, transaction} from "mobx";
+import {IOType} from "../types/IO";
+import {color} from "../global/styles";
+import {IOGetPos} from "../utils/IOGetPos";
+import {generateCubicBezierSpaghetti} from "../utils/generateCubicBezierSpaghetti";
 
 const Spaghetti = () => {
     const [width, setWidth] = useState(window.innerWidth * window.devicePixelRatio);
     const [height, setHeight] = useState(window.innerHeight * window.devicePixelRatio);
 
-    const canvas = useRef<HTMLCanvasElement>();
+    const [paths, setPaths] = useState([]);
+    const [mousePos, setMousePos] = useState({x: 0, y: 0});
+
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setWidth(window.innerWidth * window.devicePixelRatio);
+            setHeight(window.innerHeight * window.devicePixelRatio)
+        })
+    }, []);
+
+    useEffect(() => {
+        const react = reaction(() => store.pointerManager.mousePos, (mousePos) => {
+            setMousePos(mousePos);
+        });
+
+        return () => {
+            react();
+        }
+    }, []);
+
+    const  canvas = useRef<HTMLCanvasElement>();
 
     const store = useStore();
 
     useEffect(() => {
-        if (!canvas.current) return;
-        const ctx = canvas.current.getContext('2d');
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
         const reset = reaction(
             () => ({
-                connectedOutputs: store.nodes.map(a => a.inputs).flat().map(e => (e.isConnected && e, e)).flat(),
-                positions: store.nodes.map(node => node.UIData.y + node.UIData.x)
+                connectedInputs: store.nodes.map(a => a.inputs).flat().map(e => (e.isConnected && e, e)).flat(),
+                positions: store.nodes.map(node => node.UIData.y + node.UIData.x),
             }),
-            ({ connectedOutputs }) => {
-                console.log(connectedOutputs)
-                ctx.clearRect(0,0,width, height)
-                connectedOutputs.forEach(output => {
-                    if(!output.isConnected) {return;}
-                    //@ts-ignore
-                    const outputElement = document.querySelector(`#${output.connectedTo.id}`);
-                    const bound = outputElement.getBoundingClientRect();
-                    const left = bound.x + bound.width;
-                    const top = bound.y;
+            ({ connectedInputs }) => {
+                const _paths = [];
+                connectedInputs.forEach(input => {
+                    if(!input.isConnected) {return;}
 
-                    const inputElement = document.querySelector(`#${output.id}`)
-                    const bounds = inputElement.getBoundingClientRect();
-                    const l = bounds.x;
-                    const t = bounds.y;
-                    ctx.beginPath();
-                    ctx.moveTo(left, top);
-                    // ctx.lineTo(l, t);
+                    const [l1, t1] = IOGetPos(input.connectedTo);
+                    const [l2, t2] = IOGetPos(input);
 
-                    const e = clamp(Math.sqrt(Math.pow(left - l, 2) + Math.pow(top - t, 2)) / 300, 0, 1) * 120;
+                    const path = generateCubicBezierSpaghetti(l1, t1, l2, t2);
 
-                    ctx.bezierCurveTo(left + e, top + 0, l - e, t - 0, l , t);
-
-                    ctx.strokeStyle='rgba(120,120,120,255)';
-                    ctx.lineWidth = 3;
-
-                    ctx.stroke();
-                    ctx.closePath();
-
+                    _paths.push({path, input});
                 });
+
+                setPaths(() => _paths);
             },
             { fireImmediately: true }
         );
 
-        // ctx.scale(1 / window.innerWidth, window.innerHeight);
+        return () => { reset(); };
+    }, [width, height]);
 
-        return () => reset();
-    }, [canvas]);
+    useEffect(() => {
+        if (!canvas.current) return;
+        const ctx = canvas.current.getContext('2d');
+
+        let selectedOne = false;
+
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        let path__ = [...paths];
+
+        if (store.selectedIO) {
+            const [l1, t1] = IOGetPos(store.selectedIO);
+            path__.push({ generated: true, path: generateCubicBezierSpaghetti(l1, t1, mousePos.x, mousePos.y), input: store.selectedIO});
+        }
+
+        path__.forEach(({path, input, generated}) => {
+            let strokeStyle = '';
+
+            if (input.ioType === IOType.Bitmap) {
+                strokeStyle = color.types.bitmap.accent;
+            }
+
+            if (input.ioType === IOType.Number) {
+                strokeStyle = color.number.accent;
+            }
+
+            if (input.ioType === IOType.Vector) {
+                strokeStyle = color.types.bitmap.accent;
+            }
+
+            let selected = false;
+
+            ctx.lineWidth = 15;
+
+            if (!selectedOne && !generated) {
+                ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio)
+                if (ctx.isPointInStroke(path, mousePos.x, mousePos.y)) {
+                    selected = true;
+                    selectedOne = true;
+                }
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+            }
+
+            ctx.lineWidth = selected ? 3 : 3;
+
+            ctx.shadowBlur = 0;
+
+            // ctx.strokeStyle = strokeStyle + (selected ? "99" : "");
+
+            ctx.strokeStyle = selected ? '#9999ff' : strokeStyle;
+
+            // transaction(() => {
+            //     store.pointerManager.setIsSpaghettiHovered(false);
+            //
+            //     if (selected) {
+            //         store.pointerManager.setIsSpaghettiHovered(true);
+            //         // ctx.shadowBlur = 15;
+            //         // ctx.shadowColor = "rgba(0,0,0,0.3)";
+            //     }
+            // })
+
+            ctx.stroke(path);
+        });
+
+        transaction(() => {
+            store.pointerManager.setIsSpaghettiHovered(false);
+
+            if (selectedOne) {
+                store.pointerManager.setIsSpaghettiHovered(true);
+                // ctx.shadowBlur = 15;
+                // ctx.shadowColor = "rgba(0,0,0,0.3)";
+            }
+        })
+
+        return () => {
+            ctx.clearRect(0, 0, width, height);
+            ctx.resetTransform();
+        }
+    }, [paths, canvas, mousePos, width, height, store.selectedIO]);
 
     return <canvas style={{ pointerEvents:'none', width: '100%', height: '100%', position: 'absolute', zIndex: 0, top: 0, left: 0, }} ref={canvas} width={width} height={height}/>;
 };

@@ -29,7 +29,7 @@ export default class IO<T> extends IOData<T> {
 
 export class Input extends IO<Input> {
   id = `IO${generateUUID()}`;
-  connectedTo: IO<Output> | null;
+  connectedTo: Output | null;
 
   constructor() {
     super();
@@ -66,7 +66,7 @@ export class Input extends IO<Input> {
     this._disconnect();
   }
 
-  _connectTo(io: IO<Output>) {
+  _connectTo(io: Output) {
     this.connectedTo = io;
   }
 }

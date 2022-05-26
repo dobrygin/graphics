@@ -22,11 +22,13 @@ export const NodesView = observer(() => {
 
   const store = useStore();
 
-  const isPointerShown = store.isPointerShown;
-
   const addNode = useCallback((node: any) => {
     store.addNode(new node())
   }, [store]);
+
+  useEffect(() => {
+    document.body.style.cursor = store.pointerManager.cursor;
+  }, [store.pointerManager.cursor])
 
   useEffect(() => {
     // @ts-ignore
@@ -66,7 +68,7 @@ export const NodesView = observer(() => {
   }, []);
 
   return (
-    <div style={{ cursor: isPointerShown ? 'default' : 'none', zIndex: '1', position: 'relative' }}>
+    <div style={{ zIndex: '1', position: 'relative' }}>
       <button onClick={() => addNode(Image)}>add img</button>
       <button onClick={() => addNode(Blend)}>add blend</button>
       <button onClick={() => addNode(BCS)}>add bcs</button>

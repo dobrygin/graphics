@@ -5,6 +5,7 @@ import {AppRenderer} from "../classes/containers/Renderer";
 import {generateShader, generateUniforms, sortTree} from "../modules/nodesSorting/sortTree";
 import {Filter} from "pixi.js";
 import {Image} from "../classes/nodes/input/Image";
+import { PointerManager } from './modules/PointerManager';
 
 export default class Store {
   renders: number = 0;
@@ -14,11 +15,8 @@ export default class Store {
   renderer: AppRenderer;
   boundInterval: any;
   uniforms: any;
-  isPointerShown: boolean = true;
 
-  setIsPointerShown(shown: boolean) {
-    this.isPointerShown = shown;
-  }
+  pointerManager: PointerManager = new PointerManager(this);
 
   constructor() {
     const outputNode = new OutputNode();
@@ -44,6 +42,12 @@ export default class Store {
     this.renderer.canvas.style.left = '500px'
     this.renderer.canvas.style.transform = 'rotate(-180deg) scale(-1, 1)';
     window.document.body.appendChild(this.renderer.canvas);
+
+    window.addEventListener('mouseup', () => {
+      if (this.selectedIO) {
+        this.selectIO(null);
+      }
+    })
 
     reaction(() => this.nodes.reduce((prev, curr) => {
       const res = {

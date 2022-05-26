@@ -23,19 +23,13 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
     <Group>
       {outputs.map((output, i) => {
         if (output instanceof BitmapOutput) {
-          // return <div key={i} onClick={() => {}}>
-          //   {!!output.isConnected ? 'connected' : ''} bitmap ${output.name}
-          //   <button onClick={() => store.selectIO(output)}>select</button>
-          //   <button onClick={() => store.connectIO(output)}>connect</button>
-          // </div>
-
           return (
             <OutputProperty
               id={output.id}
               key={i}
               onMouseUp={() => onKeyUp(output)}
               onMouseDown={() => onKeyDown(output)}
-              isConnected={output.isConnected}
+              isConnected={output.isConnected || output === store.selectedIO}
               color={color.types.bitmap.secondary}
               connectedColor={color.types.bitmap.accent}
               title={output.UIData.title} />
@@ -48,15 +42,10 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
             key={i}
             onMouseUp={() => onKeyUp(output)}
             onMouseDown={() => onKeyDown(output)}
-            isConnected={output.isConnected}
+            isConnected={output.isConnected || output === store.selectedIO}
             color={color.number.secondary}
             connectedColor={color.number.accent}
             title={output.UIData.title} />
-          // return <div key={i} onClick={() => {}}>
-          //   {!!output.isConnected ? 'connected' : ''} number ${output.name}
-          //   <button onClick={() => store.selectIO(output)}>select</button>
-          //   <button onClick={() => store.connectIO(output)}>connect</button>
-          // </div>
         }
       })}
     </Group>
