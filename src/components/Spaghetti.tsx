@@ -5,8 +5,9 @@ import {IOType} from "../types/IO";
 import {color} from "../global/styles";
 import {IOGetPos} from "../utils/IOGetPos";
 import {generateCubicBezierSpaghetti} from "../utils/generateCubicBezierSpaghetti";
+import {observer} from "mobx-react-lite";
 
-const Spaghetti = () => {
+const Spaghetti = observer(() => {
     const [width, setWidth] = useState(window.innerWidth * window.devicePixelRatio);
     const [height, setHeight] = useState(window.innerHeight * window.devicePixelRatio);
 
@@ -39,6 +40,7 @@ const Spaghetti = () => {
             () => ({
                 connectedInputs: store.nodes.map(a => a.inputs).flat().map(e => (e.isConnected && e, e)).flat(),
                 positions: store.nodes.map(node => node.UIData.y + node.UIData.x),
+                cnvTransform: [store.tx, store.ty, store.scale]
             }),
             ({ connectedInputs }) => {
                 const _paths = [];
@@ -93,7 +95,7 @@ const Spaghetti = () => {
 
             let selected = false;
 
-            ctx.lineWidth = 15;
+            ctx.lineWidth = 15 * store.scale;
 
             if (!selectedOne && !generated) {
                 ctx.scale(1 / window.devicePixelRatio, 1 / window.devicePixelRatio)
@@ -104,7 +106,7 @@ const Spaghetti = () => {
                 ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
             }
 
-            ctx.lineWidth = selected ? 3 : 3;
+            ctx.lineWidth = selected ? 3 * store.scale : 3 * store.scale;
 
             ctx.shadowBlur = 0;
 
@@ -142,6 +144,6 @@ const Spaghetti = () => {
     }, [paths, canvas, mousePos, width, height, store.selectedIO]);
 
     return <canvas style={{ pointerEvents:'none', width: '100%', height: '100%', position: 'absolute', zIndex: 0, top: 0, left: 0, }} ref={canvas} width={width} height={height}/>;
-};
+});
 
 export default Spaghetti;

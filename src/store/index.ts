@@ -16,7 +16,20 @@ export default class Store {
   boundInterval: any;
   uniforms: any;
 
+  scale: number = 1.0;
+  tx: number = 0.0;
+  ty: number = 0.0;
+
   pointerManager: PointerManager = new PointerManager(this);
+
+  setScale(scale) {
+    this.scale = scale;
+  }
+
+  setTranslate(x, y) {
+    this.tx = x;
+    this.ty = y;
+  }
 
   constructor() {
     const outputNode = new OutputNode();
