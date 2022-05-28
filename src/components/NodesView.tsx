@@ -52,8 +52,8 @@ export const NodesView = observer(() => {
             ty = newTy;
         } else {
             // Your trackpad X and Y positions
-            tx -= evt.deltaX * 2 * clamp(scale, 0, 1);
-            ty -= evt.deltaY * 2 * clamp(scale, 0, 1);
+            tx -= evt.deltaX * clamp(scale, 0, 1);
+            ty -= evt.deltaY * clamp(scale, 0, 1);
         }
 
         store.setScale(scale);
@@ -111,34 +111,41 @@ export const NodesView = observer(() => {
 
   return (
     <>
-      <button onClick={() => addNode(Image)}>add img</button>
-      <button onClick={() => addNode(Blend)}>add blend</button>
-      <button onClick={() => addNode(BCS)}>add bcs</button>
-      <button onClick={() => addNode(BitmapChannelSplitter)}>add ch splitter</button>
-      <button onClick={() => addNode(BitmapChannelCombiner)}>add ch combiner</button>
-      <button onClick={() => addNode(NumberMath)}>add number math</button>
-      <div ref={ref} style={{ top: 0,
-        left: 0, width: '100vw', height: '100vh', zIndex: '1', position: 'relative' }}>
-        {
-          store.nodes.map((node, i) => {
-            if (node instanceof Image) {
-              return <InputNode key={i} node={node} />
-            }
+        <div id="result" style={{ alignItems: 'center', justifyContent: 'center', display: 'flex', background: 'black', overflow: 'hidden', top: 0,
+            left: '50vw', width: '50vw', height: '100vh', zIndex: '1', position: 'absolute' }}>
 
-            if (node instanceof RenderableNode) {
-              return <RenderNode key={i} node={node} />;
-            }
-          })
-        }
+        </div>
+        <div style={{ overflow: 'hidden', top: 0,
+            left: 0, width: '50vw', height: '100vh', zIndex: '1', position: 'relative' }}>
+            <button onClick={() => addNode(Image)}>add img</button>
+            <button onClick={() => addNode(Blend)}>add blend</button>
+            <button onClick={() => addNode(BCS)}>add bcs</button>
+            <button onClick={() => addNode(BitmapChannelSplitter)}>add ch splitter</button>
+            <button onClick={() => addNode(BitmapChannelCombiner)}>add ch combiner</button>
+            <button onClick={() => addNode(NumberMath)}>add number math</button>
+            <div ref={ref} style={{ top: 0,
+                left: 0, width: '100vw', height: '100vh', zIndex: '1', position: 'relative' }}>
+                {
+                    store.nodes.map((node, i) => {
+                        if (node instanceof Image) {
+                            return <InputNode key={i} node={node} />
+                        }
 
-        {
-          store.nodes.map((node, i) => {
-            if (node instanceof OutputNode) {
-              return <OutputNodeView key={i} node={node} />;
-            }
-          })
-        }
-      </div>
+                        if (node instanceof RenderableNode) {
+                            return <RenderNode key={i} node={node} />;
+                        }
+                    })
+                }
+
+                {
+                    store.nodes.map((node, i) => {
+                        if (node instanceof OutputNode) {
+                            return <OutputNodeView key={i} node={node} />;
+                        }
+                    })
+                }
+            </div>
+        </div>
     </>
   );
 });
