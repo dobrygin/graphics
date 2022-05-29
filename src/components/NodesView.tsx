@@ -2,7 +2,7 @@ import { useStore } from '../store/provider/StoreProvider';
 import { OutputNode, RenderableNode } from '../classes/Node';
 import { OutputNodeView } from './TestNodes/Output';
 import { BCS } from '../classes/nodes/colorCorrection/BCS';
-import { useCallback, useEffect } from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import { observer } from 'mobx-react-lite';
 import { RenderNode } from './TestNodes/RenderNode';
 import React from 'react';
@@ -17,10 +17,52 @@ import { BitmapChannelCombiner } from '../classes/nodes/imageUtils/BitmapChannel
 import { NumberMath } from '../classes/math/NumberMath';
 import {Blend} from "../classes/nodes/mix/Blend";
 import '../global/styles/index.css';
+import {clamp} from "../utils/clamp";
+
 
 export const NodesView = observer(() => {
 
   const store = useStore();
+
+  const ref = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    if (!ref.current) return;
+    let scale = 1;
+    let tx = 0;
+    let ty = 0;
+    window.addEventListener('wheel', (evt) => {
+
+        evt.preventDefault();
+
+        if (evt.ctrlKey) {
+            const center = [store.pointerManager.x, store.pointerManager.y];
+            let newTx, newTy, newScale;
+
+            newScale = clamp(scale - evt.deltaY * 0.01, 0.2, 2);
+
+            // calculate new translate position
+            // [current mouse position] - ([current mouse position] - [current translate]) * magnification
+            newTx = center[0] - (center[0] - tx) * newScale / scale;
+            newTy = center[1] - (center[1] - ty) * newScale / scale;
+
+            // set new scale and translate position
+            scale = newScale;
+            tx = newTx;
+            ty = newTy;
+        } else {
+            // Your trackpad X and Y positions
+            tx -= evt.deltaX * 2 * clamp(scale, 0, 1);
+            ty -= evt.deltaY * 2 * clamp(scale, 0, 1);
+        }
+
+        store.setScale(scale);
+        store.setTranslate(tx, ty);
+
+        ref.current.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        ref.current.style.transformOrigin = 'left top';
+    }, { passive: false });
+  }, [ref]);
 
   const addNode = useCallback((node: any) => {
     store.addNode(new node())
@@ -68,40 +110,35 @@ export const NodesView = observer(() => {
   }, []);
 
   return (
-    <div style={{ zIndex: '1', position: 'relative' }}>
+    <>
       <button onClick={() => addNode(Image)}>add img</button>
       <button onClick={() => addNode(Blend)}>add blend</button>
       <button onClick={() => addNode(BCS)}>add bcs</button>
       <button onClick={() => addNode(BitmapChannelSplitter)}>add ch splitter</button>
       <button onClick={() => addNode(BitmapChannelCombiner)}>add ch combiner</button>
       <button onClick={() => addNode(NumberMath)}>add number math</button>
-      {/*<Group>A</Group>*/}
-      {/*<Group>B</Group>*/}
-      {/*<Group>C</Group>*/}
-      {/*<Group>*/}
-      {/*  <Group>A</Group>*/}
-      {/*  <Group>A</Group>*/}
-      {/*  <Group>A</Group>*/}
-      {/*</Group>*/}
-      {
-        store.nodes.map((node, i) => {
-          if (node instanceof Image) {
-            return <InputNode key={i} node={node} />
-          }
+      <div ref={ref} style={{ top: 0,
+        left: 0, width: '100vw', height: '100vh', zIndex: '1', position: 'relative' }}>
+        {
+          store.nodes.map((node, i) => {
+            if (node instanceof Image) {
+              return <InputNode key={i} node={node} />
+            }
 
-          if (node instanceof RenderableNode) {
-            return <RenderNode key={i} node={node} />;
-          }
-        })
-      }
+            if (node instanceof RenderableNode) {
+              return <RenderNode key={i} node={node} />;
+            }
+          })
+        }
 
-      {
-        store.nodes.map((node, i) => {
-          if (node instanceof OutputNode) {
-            return <OutputNodeView key={i} node={node} />;
-          }
-        })
-      }
-    </div>
+        {
+          store.nodes.map((node, i) => {
+            if (node instanceof OutputNode) {
+              return <OutputNodeView key={i} node={node} />;
+            }
+          })
+        }
+      </div>
+    </>
   );
 });

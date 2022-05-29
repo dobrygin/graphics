@@ -1,7 +1,7 @@
 import React from "react";
 import {IODotElement, IODotElementOutput} from "./styles";
 
-const IODot = ({ id, isOutput }: { id: string; isOutput?: boolean }) => {
+export const IODot = ({ id, isOutput }: { id: string; isOutput?: boolean }) => {
     return isOutput ? <IODotElementOutput id={id} className="io-dot" /> : <IODotElement id={id} className="io-dot" />;
 };
 

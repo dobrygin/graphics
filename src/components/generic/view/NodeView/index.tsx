@@ -2,6 +2,7 @@ import {NodeElement, NodeElementContent, NodeElementHeader, NodeElementHeaderIco
 import {ArrowDown} from "../../../icons/ArrowDown";
 import React, {useCallback, useEffect, useRef} from "react";
 import {observer} from "mobx-react-lite";
+import {useStore} from "../../../../store/provider/StoreProvider";
 
 const NodeView = observer(({ title, children, width, UIData }: any) => {
     const startPosX = useRef(0);
@@ -14,6 +15,8 @@ const NodeView = observer(({ title, children, width, UIData }: any) => {
     const onMouseDown = useRef(null);
     const onMouseMove = useRef(null);
 
+    const store = useStore();
+
     useEffect(() => {
         onMouseUp.current = () => {
             window.removeEventListener('mouseup', onMouseUp.current)
@@ -25,11 +28,9 @@ const NodeView = observer(({ title, children, width, UIData }: any) => {
             let y = e.clientY - startPosY.current;
 
             UIData.update({
-                x: initPosX.current + x,
-                y: initPosY.current + y
+                x: initPosX.current + x * (1 / store.scale),
+                y: initPosY.current + y * (1 / store.scale)
             })
-
-            console.log(x, y);
         }
 
         onMouseDown.current = (e) => {
