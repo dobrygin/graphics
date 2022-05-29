@@ -6,6 +6,7 @@ import {color} from "../global/styles";
 import {IOGetPos} from "../utils/IOGetPos";
 import {generateCubicBezierSpaghetti} from "../utils/generateCubicBezierSpaghetti";
 import {observer} from "mobx-react-lite";
+import {Output} from "../classes/IO/IO";
 
 const Spaghetti = observer(() => {
     const [width, setWidth] = useState(window.innerWidth * window.devicePixelRatio);
@@ -36,31 +37,39 @@ const Spaghetti = observer(() => {
     const store = useStore();
 
     useEffect(() => {
+        let updateId = -1;
         const reset = reaction(
             () => ({
                 connectedInputs: store.nodes.map(a => a.inputs).flat().map(e => (e.isConnected && e, e)).flat(),
-                positions: store.nodes.map(node => node.UIData.y + node.UIData.x),
+                positions: store.nodes.map(node => [node.UIData.y, node.UIData.x]),
                 cnvTransform: [store.tx, store.ty, store.scale]
             }),
-            ({ connectedInputs }) => {
-                const _paths = [];
-                connectedInputs.forEach(input => {
-                    if(!input.isConnected) {return;}
+            ({ connectedInputs, positions }) => {
 
-                    const [l1, t1] = IOGetPos(input.connectedTo);
-                    const [l2, t2] = IOGetPos(input);
+                // setTimeout here is important,
+                // because browser handle bounding box
+                // update after mobx reaction, so we need
+                // next tick to update everything.
+                updateId = window.setTimeout(() => {
+                    const _paths = [];
+                    connectedInputs.forEach(input => {
+                        if(!input.isConnected) {return;}
 
-                    const path = generateCubicBezierSpaghetti(l1, t1, l2, t2);
+                        const [l1, t1] = IOGetPos(input.connectedTo);
+                        const [l2, t2] = IOGetPos(input);
 
-                    _paths.push({path, input});
+                        const path = generateCubicBezierSpaghetti(l1, t1, l2, t2);
+
+                        _paths.push({path, input});
+                    });
+
+                    setPaths(() => _paths);
                 });
-
-                setPaths(() => _paths);
             },
             { fireImmediately: true }
         );
 
-        return () => { reset(); };
+        return () => { window.clearTimeout(updateId); reset(); };
     }, [width, height]);
 
     useEffect(() => {
@@ -75,7 +84,7 @@ const Spaghetti = observer(() => {
 
         if (store.selectedIO) {
             const [l1, t1] = IOGetPos(store.selectedIO);
-            path__.push({ generated: true, path: generateCubicBezierSpaghetti(l1, t1, mousePos.x, mousePos.y), input: store.selectedIO});
+            path__.push({ generated: true, path: store.selectedIO instanceof Output ? generateCubicBezierSpaghetti(l1, t1, mousePos.x, mousePos.y) : generateCubicBezierSpaghetti(mousePos.x, mousePos.y, l1, t1), input: store.selectedIO});
         }
 
         path__.forEach(({path, input, generated}) => {
@@ -107,23 +116,8 @@ const Spaghetti = observer(() => {
             }
 
             ctx.lineWidth = selected ? 3 * store.scale : 3 * store.scale;
-
             ctx.shadowBlur = 0;
-
-            // ctx.strokeStyle = strokeStyle + (selected ? "99" : "");
-
             ctx.strokeStyle = selected ? '#9999ff' : strokeStyle;
-
-            // transaction(() => {
-            //     store.pointerManager.setIsSpaghettiHovered(false);
-            //
-            //     if (selected) {
-            //         store.pointerManager.setIsSpaghettiHovered(true);
-            //         // ctx.shadowBlur = 15;
-            //         // ctx.shadowColor = "rgba(0,0,0,0.3)";
-            //     }
-            // })
-
             ctx.stroke(path);
         });
 
@@ -132,8 +126,6 @@ const Spaghetti = observer(() => {
 
             if (selectedOne) {
                 store.pointerManager.setIsSpaghettiHovered(true);
-                // ctx.shadowBlur = 15;
-                // ctx.shadowColor = "rgba(0,0,0,0.3)";
             }
         })
 

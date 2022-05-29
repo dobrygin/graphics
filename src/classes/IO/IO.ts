@@ -73,7 +73,7 @@ export class Input extends IO<Input> {
 
 export class Output extends IO<Output> {
   id = `IO${generateUUID()}`;
-  connectedTo: IO<Input>[] | null;
+  connectedTo: Input[] | null;
 
   constructor() {
     super();
@@ -103,15 +103,26 @@ export class Output extends IO<Output> {
 
   _disconnect(io: Input) {
     const index = this.connectedTo.indexOf(io);
-    this.connectedTo.splice(index, 1);
+    console.log(index, '19231923')
+    if (index !== -1) {
+      this.connectedTo.splice(index, 1);
+    }
   }
 
-  disconnect(io: Input) {
-    this._disconnect(io);
-    io._disconnect();
+  disconnect(io?: Input) {
+    if (io) {
+      this._disconnect(io);
+      io._disconnect();
+    } else {
+      transaction(() => {
+        [...this.connectedTo].forEach(conn => {
+          conn.disconnect();
+        })
+      });
+    }
   }
 
-  _connectTo(io: IO<Input>) {
+  _connectTo(io: Input) {
     this.connectedTo.push(io);
   }
 }

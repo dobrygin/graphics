@@ -6,14 +6,18 @@ export const SliderElement = styled.div`
   height: 24px;
   border-radius: 4px;
   background-color: ${() => color.IO.fill};
-  overflow: hidden;
   position: relative;
   border: 1px solid ${() => color.IO.stroke};
 `
 
-export const SliderElementBox = styled.div`
+export const SliderElementBox = styled.div<{ isConnected: boolean; connectedColor: string; color: string}>`
   width: 100%;
   display: flex;
+  position: relative;
+  
+  --io-dot-color: ${(p) => { return p.isConnected ? p.connectedColor : p.color }};
+  --io-dot-stroke: ${(p) => { return p.isConnected ? p.connectedColor : color.nodes.stroke }};
+  
   & + & {
     margin-top: 2px;
   }
@@ -38,7 +42,7 @@ export const SliderValuesTitle = styled.div`
   flex: 1;
   height: 100%;
   line-height: 24px;
-  padding-left: 4px;
+  padding-left: 8px;
 `
 
 export const SliderValuesValue = styled.div`

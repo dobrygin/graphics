@@ -4,11 +4,11 @@ import {observer} from "mobx-react-lite";
 import {useStore} from "../../../../store/provider/StoreProvider";
 import IODot from "../IODot";
 
-const InputProperty = observer(({ id, title, isConnected, connectedColor, color, onMouseDown, onMouseUp }: any) => {
+const InputProperty = observer(({ id, title, isConnected, connectedColor, color, onMouseDown, onMouseUp, onDoubleClick }: any) => {
     const store = useStore();
 
     return (
-        <InputPropElement ioSelected={!!store.selectedIO} onMouseUp={onMouseUp} onMouseDown={onMouseDown} isConnected={isConnected} color={color} connectedColor={connectedColor} >
+        <InputPropElement ioSelected={!!store.selectedIO} onMouseUp={onMouseUp} onMouseDown={onMouseDown} onDoubleClick={onDoubleClick} isConnected={isConnected} color={color} connectedColor={connectedColor} >
             <IODot id={id} /> {title}
         </InputPropElement>
     );
