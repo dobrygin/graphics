@@ -10,8 +10,9 @@ import {
 } from "./styles";
 import {clamp} from "../../../utils/clamp";
 import {useStore} from "../../../store/provider/StoreProvider";
+import IODot from "../../generic/view/IODot";
 
-const Slider = ({ title = "Title", step = 0.01, min = -2048, max = 2048, value = 0, onSliderChange = (e) => {} }) => {
+const Slider = ({ isConnected, color: ioColor, connectedColor, input: nodeInput = null, title = "Title", step = 0.01, min = -2048, max = 2048, value = 0, onSliderChange = (e) => {} }) => {
     const store = useStore();
     const dontgo = useRef(false);
     const st = useRef(Math.sqrt(Math.pow(min - max, 2)));
@@ -102,34 +103,66 @@ const Slider = ({ title = "Title", step = 0.01, min = -2048, max = 2048, value =
         onSliderChange(currentValue)
     }, [currentValue]);
 
-    return (
-        <SliderElementBox>
-                <SliderElement ref={sliderElRef}>
-                    {isEditMode ?
-                        <SliderInputNumber
-                            onChange={(e) => onInputChange(e)}
-                            //@ts-ignore
-                            onKeyUp={(e: KeyboardEvent) => onKeyUp(e)}
-                            value={isActive ? undefined : parseFloat(`${currentValue}`).toFixed(3)}
-                            ref={input}
-                            onFocus={() => goFocus()}
-                            onBlur={() => goBlur()}
-                            type="number"
-                        /> :
-                        <div style={{ width: '100%', height: '100%' }} onClick={() => goEditMode()}
-                             onPointerDown={(e) => onPointerDownRef.current(e)}>
-                            <SliderValues>
-                                <SliderValuesTitle>
-                                    {title}
-                                </SliderValuesTitle>
-                                <SliderValuesValue>
-                                    {currentValue.toFixed(3)}
-                                </SliderValuesValue>
-                            </SliderValues>
-                            <SliderFillElement width={clamp((currentValue - min) / st.current, 0, 1)} color={color.number.accent}>
+    const onKeyDowns = useCallback((e) => {
+        store.selectIO(e);
+    }, []);
 
-                            </SliderFillElement>
-                        </div>
+    const onKeyUps = useCallback((e) => {
+        store.connectIO(e);
+    }, []);
+
+    const unConnect = useCallback(() => {
+        if (isConnected) {
+            nodeInput.disconnect();
+        }
+    }, [isConnected]);
+
+    return (
+        <SliderElementBox onDoubleClick={() => unConnect()} onMouseUp={() => onKeyUps(nodeInput )} color={ioColor} connectedColor={connectedColor} isConnected={isConnected}>
+                <SliderElement ref={sliderElRef}>
+                    { nodeInput && <IODot
+                           onMouseDown={() => onKeyDowns(nodeInput)} id={nodeInput.id} /> }
+                    { isConnected ?
+                        <>
+                            <div style={{ width: '100%', height: '100%', overflow: 'hidden', borderRadius: '4px' }}>
+                                <SliderValues>
+                                    <SliderValuesTitle>
+                                        {title}
+                                    </SliderValuesTitle>
+                                    <SliderValuesValue>
+                                    </SliderValuesValue>
+                                </SliderValues>
+                                <SliderFillElement width={1} color={color.number.accent} />
+                            </div>
+                        </> :
+                        <>
+                            {isEditMode ?
+                                <SliderInputNumber
+                                    onChange={(e) => onInputChange(e)}
+                                    //@ts-ignore
+                                    onKeyUp={(e: KeyboardEvent) => onKeyUp(e)}
+                                    value={isActive ? undefined : parseFloat(`${currentValue}`).toFixed(3)}
+                                    ref={input}
+                                    onFocus={() => goFocus()}
+                                    onBlur={() => goBlur()}
+                                    type="number"
+                                /> :
+                                <div style={{ width: '100%', height: '100%', overflow: 'hidden', borderRadius: '4px' }} onClick={() => goEditMode()}
+                                     onPointerDown={(e) => onPointerDownRef.current(e)}>
+                                    <SliderValues>
+                                        <SliderValuesTitle>
+                                            {title}
+                                        </SliderValuesTitle>
+                                        <SliderValuesValue>
+                                            {currentValue.toFixed(3)}
+                                        </SliderValuesValue>
+                                    </SliderValues>
+                                    <SliderFillElement width={clamp((currentValue - min) / st.current, 0, 1)} color={color.number.accent}>
+
+                                    </SliderFillElement>
+                                </div>
+                            }
+                        </>
                     }
                 </SliderElement>
         </SliderElementBox>

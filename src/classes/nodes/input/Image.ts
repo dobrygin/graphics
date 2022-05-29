@@ -12,8 +12,8 @@ export class Image extends InputNode {
 
   uniforms = {
     [`tex_${this.id}`]: false,
-    [`width_tex_${this.id}`]: false,
-    [`height_tex_${this.id}`]: false,
+    [`width_tex_${this.id}`]: 2048,
+    [`height_tex_${this.id}`]: 2048,
     [`image_transform_X_${this.id}`]: 0,
     [`image_transform_Y_${this.id}`]: 0,
   };

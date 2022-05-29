@@ -13,11 +13,17 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
 
   const onKeyDown = useCallback((e) => {
     store.selectIO(e);
-  }, [outputs]);
+  }, []);
 
   const onKeyUp = useCallback((e) => {
     store.connectIO(e);
-  }, [outputs]);
+  }, []);
+
+  const unConnect = useCallback((isConnected, node) => {
+    if (isConnected) {
+      node.disconnect();
+    }
+  }, []);
 
   return (
     <Group>
@@ -27,6 +33,7 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
             <OutputProperty
               id={output.id}
               key={i}
+              onDoubleClick={() => unConnect(output.isConnected, output)}
               onMouseUp={() => onKeyUp(output)}
               onMouseDown={() => onKeyDown(output)}
               isConnected={output.isConnected || output === store.selectedIO}
@@ -42,6 +49,7 @@ export const NodeOutputs = observer(({ outputs }: { outputs: Output[] }) => {
             key={i}
             onMouseUp={() => onKeyUp(output)}
             onMouseDown={() => onKeyDown(output)}
+            onDoubleClick={() => unConnect(output.isConnected, output)}
             isConnected={output.isConnected || output === store.selectedIO}
             color={color.number.secondary}
             connectedColor={color.number.accent}

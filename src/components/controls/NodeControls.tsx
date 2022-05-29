@@ -5,9 +5,13 @@ import { SliderControl } from '../../classes/controls/SliderControl';
 import {SelectControl} from "../../classes/controls/SelectControl";
 import Slider from "./slider";
 import {Group} from "../generic/view/Group";
+import {color} from "../../global/styles";
+import {useStore} from "../../store/provider/StoreProvider";
 
 export const NodeControls = observer(({ controls }: { controls: Control[] }) => {
   const [controlsActive, setControlsActive] = useState({});
+
+  const store = useStore();
 
   const prepValue = (event: any, control: SliderControl, index: number) => {
     const float = parseFloat(event.target.value)
@@ -43,6 +47,10 @@ export const NodeControls = observer(({ controls }: { controls: Control[] }) => 
         return (
             <Slider
                 key={i}
+                input={control.UIData.input}
+                isConnected={control.UIData.input === null ? false : control.UIData.input.isConnected || control.UIData.input === store.selectedIO}
+                color={color.number.secondary}
+                connectedColor={color.number.accent}
             //@ts-ignore
                 title={control.UIData.title} onSliderChange={(value) => control.setValue(value)} value={control.value} min={control.min} max={control.max} step={control.step} />
             // {/*<p style={{ fontFamily: 'monospace', margin: 0 }}>*/}

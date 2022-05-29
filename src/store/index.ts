@@ -49,12 +49,16 @@ export default class Store {
 
     window.requestAnimationFrame(this.boundInterval);
 
-    this.renderer.canvas.style.width = '256px';
-    this.renderer.canvas.style.position = 'fixed'
+    this.renderer.canvas.style.width = '100%';
+    this.renderer.canvas.style.objectFit = 'contain';
     this.renderer.canvas.style.top = '0';
-    this.renderer.canvas.style.left = '500px'
+    this.renderer.canvas.style.left = '0'
     this.renderer.canvas.style.transform = 'rotate(-180deg) scale(-1, 1)';
-    window.document.body.appendChild(this.renderer.canvas);
+    this.renderer.canvas.style.maxHeight = '100%';
+    this.renderer.canvas.style.maxWidth = '100%';
+    setTimeout(() => {
+      window.document.body.querySelector('#result').appendChild(this.renderer.canvas);
+    }, 1000);
 
     window.addEventListener('mouseup', () => {
       if (this.selectedIO) {

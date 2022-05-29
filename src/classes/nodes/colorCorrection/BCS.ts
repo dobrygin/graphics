@@ -25,21 +25,21 @@ export class BCS extends RenderableNode {
   );
 
   contrast: NumberInput = new NumberInput(
-      { title: 'Contrast' },
+      { title: 'Contrast', isShown: false },
       'contrast',
       this,
       IOType.Number,
   )
 
   brightness: NumberInput = new NumberInput(
-      { title: 'Brightness' },
+      { title: 'Brightness', isShown: false },
       'brightness',
       this,
       IOType.Number,
   )
 
   saturation: NumberInput = new NumberInput(
-      { title: 'Saturation' },
+      { title: 'Saturation', isShown: false },
       'saturation',
       this,
       IOType.Number,
@@ -62,9 +62,9 @@ export class BCS extends RenderableNode {
       this.setOutputs([this.output]);
     });
     this.setControls([
-      new SliderControl({ title: 'Contrast' }, this.uniforms, `contrast_BCS_${this.id}`, 0.1, 0.0, 10.0),
-      new SliderControl({ title: 'Brightness' }, this.uniforms, `brightness_BCS_${this.id}`, 0.1, -1.0, 1.0),
-      new SliderControl({ title: 'Saturation' }, this.uniforms, `saturation_BCS_${this.id}`, 0.1, 0.0, 10.0),
+      new SliderControl({ title: 'Contrast', input: this.contrast }, this.uniforms, `contrast_BCS_${this.id}`, 0.1, 0.0, 10.0),
+      new SliderControl({ title: 'Brightness', input: this.brightness }, this.uniforms, `brightness_BCS_${this.id}`, 0.1, -1.0, 1.0),
+      new SliderControl({ title: 'Saturation', input: this.saturation }, this.uniforms, `saturation_BCS_${this.id}`, 0.1, 0.0, 10.0),
     ]);
     makeObservable(this, {
     });

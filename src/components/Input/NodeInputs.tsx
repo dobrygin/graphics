@@ -21,15 +21,27 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
     store.connectIO(e);
   }, [inputs]);
 
+  const unConnect = useCallback((isConnected, node) => {
+    if (isConnected) {
+      node.disconnect();
+    }
+  }, []);
+
   return (
     <>
       {inputs.map((input, i) => {
+        // @ts-ignore
+        if (!input.UIData.isShown) {
+          return;
+        }
+
         if (input instanceof BitmapInput) {
           return <InputProperty
             id={input.id}
             key={i}
             onMouseUp={() => onKeyUp(input)}
             onMouseDown={() => onKeyDown(input)}
+            onDoubleClick={() => unConnect(input.isConnected, input)}
             isConnected={input.isConnected || input === store.selectedIO}
             color={color.types.bitmap.secondary}
             connectedColor={color.types.bitmap.accent}
@@ -42,6 +54,7 @@ export const NodeInputs = observer(({ inputs }: { inputs: Input[] }) => {
               key={i}
               onMouseUp={() => onKeyUp(input)}
               onMouseDown={() => onKeyDown(input)}
+              onDoubleClick={() => unConnect(input.isConnected, input)}
               isConnected={input.isConnected || input === store.selectedIO}
               color={color.number.secondary}
               connectedColor={color.number.accent}
