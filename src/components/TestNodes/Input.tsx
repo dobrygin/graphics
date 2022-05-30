@@ -6,6 +6,7 @@ import { Bitmap } from '../../classes/data/Bitmap';
 import { NodeControls } from '../controls/NodeControls';
 import NodeView from "../generic/view/NodeView";
 import {Group} from "../generic/view/Group";
+import { decode } from "fast-png";
 
 export const InputNode = observer(({ node }: { node: Image }) => {
   const setImage = useCallback((file: File) => {
@@ -19,6 +20,15 @@ export const InputNode = observer(({ node }: { node: Image }) => {
     }
     if (file.type === 'image/tiff') {
 
+    }
+
+    if (file.type === 'image/png') {
+        file.arrayBuffer().then(buf => {
+            const b = decode(buf);
+            if (b.data instanceof Uint8Array) {
+                node.bitmap.setBitmap(new Bitmap(b.data, b.width, b.height))
+            }
+        });
     }
   }, [node]);
   return (

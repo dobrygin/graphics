@@ -6,6 +6,7 @@ import {generateShader, generateUniforms, sortTree} from "../modules/nodesSortin
 import {Filter} from "pixi.js";
 import {Image} from "../classes/nodes/input/Image";
 import { PointerManager } from './modules/PointerManager';
+import {TimeManager} from "./modules/TimeManager";
 
 export default class Store {
   renders: number = 0;
@@ -21,6 +22,7 @@ export default class Store {
   ty: number = 0.0;
 
   pointerManager: PointerManager = new PointerManager(this);
+  timeManager: TimeManager = new TimeManager(this);
 
   setScale(scale) {
     this.scale = scale;
@@ -117,6 +119,7 @@ export default class Store {
 
   render() {
     this.renderer.renderer.render(this.renderer.container);
+    this.timeManager.tick();
     window.requestAnimationFrame(this.boundInterval);
   }
 

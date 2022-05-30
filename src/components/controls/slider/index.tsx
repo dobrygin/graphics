@@ -11,8 +11,9 @@ import {
 import {clamp} from "../../../utils/clamp";
 import {useStore} from "../../../store/provider/StoreProvider";
 import IODot from "../../generic/view/IODot";
+import {observer} from "mobx-react-lite";
 
-const Slider = ({ isConnected, color: ioColor, connectedColor, input: nodeInput = null, title = "Title", step = 0.01, min = -2048, max = 2048, value = 0, onSliderChange = (e) => {} }) => {
+const Slider = observer<any>(({ isConnected, color: ioColor, connectedColor, input: nodeInput = null, title = "Title", step = 0.01, min = -2048, max = 2048, value = 0, onSliderChange = (e) => {} }) => {
     const store = useStore();
     const dontgo = useRef(false);
     const st = useRef(Math.sqrt(Math.pow(min - max, 2)));
@@ -118,7 +119,7 @@ const Slider = ({ isConnected, color: ioColor, connectedColor, input: nodeInput 
     }, [isConnected]);
 
     return (
-        <SliderElementBox onDoubleClick={() => unConnect()} onMouseUp={() => onKeyUps(nodeInput )} color={ioColor} connectedColor={connectedColor} isConnected={isConnected}>
+        <SliderElementBox onDoubleClick={() => unConnect()} onMouseUp={() => onKeyUps(nodeInput)} color={ioColor} connectedColor={connectedColor} isConnected={isConnected}>
                 <SliderElement ref={sliderElRef}>
                     { nodeInput && <IODot
                            onMouseDown={() => onKeyDowns(nodeInput)} id={nodeInput.id} /> }
@@ -154,7 +155,7 @@ const Slider = ({ isConnected, color: ioColor, connectedColor, input: nodeInput 
                                             {title}
                                         </SliderValuesTitle>
                                         <SliderValuesValue>
-                                            {currentValue.toFixed(3)}
+                                            {value.toFixed(3)}
                                         </SliderValuesValue>
                                     </SliderValues>
                                     <SliderFillElement width={clamp((currentValue - min) / st.current, 0, 1)} color={color.number.accent}>
@@ -167,6 +168,6 @@ const Slider = ({ isConnected, color: ioColor, connectedColor, input: nodeInput 
                 </SliderElement>
         </SliderElementBox>
     );
-}
+});
 
 export default Slider;

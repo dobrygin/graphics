@@ -13,14 +13,14 @@ export class NumberMath extends RenderableNode {
     title: string = 'Number Math';
 
     firstNumIn: NumberInput = new NumberInput(
-        { title: 'First number' },
+        { title: 'First number', isShown: false },
         'number',
         this,
         IOType.Bitmap
     );
 
     secondNumIn: NumberInput = new NumberInput(
-        { title: 'Second number' },
+        { title: 'Second number', isShown: false },
         'number',
         this,
         IOType.Bitmap
@@ -46,8 +46,8 @@ export class NumberMath extends RenderableNode {
         });
         transaction(() => {
             this.setControls([
-                new SliderControl({ title: 'First number' }, this.uniforms, `first_num_${this.id}`, 0.01, -4.0, 4.0),
-                new SliderControl({ title: 'Second number' }, this.uniforms, `second_num_${this.id}`, 0.01, -4.0, 4.0),
+                new SliderControl({ title: 'First number', input: this.firstNumIn }, this.uniforms, `first_num_${this.id}`, 0.01, -4.0, 4.0),
+                new SliderControl({ title: 'Second number', input: this.secondNumIn }, this.uniforms, `second_num_${this.id}`, 0.01, -4.0, 4.0),
                 new SelectControl(
                     this.uniforms,
                     `selectControl_Math_Operation_${this.id}`,
@@ -55,7 +55,9 @@ export class NumberMath extends RenderableNode {
                         'Add': 0,
                         'Divide': 1,
                         'Multiply': 2,
-                        'Minus': 3
+                        'Minus': 3,
+                        'Sin': 4,
+                        'Cos': 5
                     },
                     'Add'
                 )
@@ -84,7 +86,13 @@ uniform float second_num_${this.id};`
         const c = (operation) => {
             const number1 = this.firstNumIn.isConnected ? this.firstNumIn.connectedTo.shaderResultName : `first_num_${this.id}`;
             const number2 = this.secondNumIn.isConnected ? this.secondNumIn.connectedTo.shaderResultName : `second_num_${this.id}`;
-            return `Math_number_${this.id} = ${number1} ${operation} ${number2};`;
+            if (operation === "sin") {
+                return `Math_number_${this.id} = sin(${number1});`;
+            } else if (operation === "cos") {
+                return `Math_number_${this.id} = cos(${number1});`;
+            } else {
+                return `Math_number_${this.id} = ${number1} ${operation} ${number2};`;
+            }
         };
         return `float Math_number_${this.id} = 0.0;
 if (selectControl_Math_Operation_${this.id} == 0) {
@@ -95,6 +103,10 @@ if (selectControl_Math_Operation_${this.id} == 0) {
     ${c('*')}
 } else if(selectControl_Math_Operation_${this.id} == 3) {
     ${c('-')}
+} else if(selectControl_Math_Operation_${this.id} == 4) {
+    ${c('sin')}
+} else if(selectControl_Math_Operation_${this.id} == 5) {
+    ${c('cos')}
 }
         `;
     }

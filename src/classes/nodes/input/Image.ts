@@ -10,6 +10,10 @@ export class Image extends InputNode {
 
   bitmap = new BitmapOutput({ title: 'Bitmap' }, 'bitmap', this, IOType.Bitmap, `tex_color_${this.id}`);
 
+  controlUniforms = {
+
+  };
+
   uniforms = {
     [`tex_${this.id}`]: false,
     [`width_tex_${this.id}`]: 2048,

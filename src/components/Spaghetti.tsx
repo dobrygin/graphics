@@ -90,16 +90,30 @@ const Spaghetti = observer(() => {
         path__.forEach(({path, input, generated}) => {
             let strokeStyle = '';
 
-            if (input.ioType === IOType.Bitmap) {
-                strokeStyle = color.types.bitmap.accent;
-            }
+            if (generated) {
+                if (input.ioType === IOType.Bitmap) {
+                    strokeStyle = color.types.bitmap.accent;
+                }
 
-            if (input.ioType === IOType.Number) {
-                strokeStyle = color.number.accent;
-            }
+                if (input.ioType === IOType.Number) {
+                    strokeStyle = color.number.accent;
+                }
 
-            if (input.ioType === IOType.Vector) {
-                strokeStyle = color.types.bitmap.accent;
+                if (input.ioType === IOType.Vector) {
+                    strokeStyle = color.types.bitmap.accent;
+                }
+            } else {
+                if (input.connectedTo.ioType === IOType.Bitmap) {
+                    strokeStyle = color.types.bitmap.accent;
+                }
+
+                if (input.connectedTo.ioType === IOType.Number) {
+                    strokeStyle = color.number.accent;
+                }
+
+                if (input.connectedTo.ioType === IOType.Vector) {
+                    strokeStyle = color.types.bitmap.accent;
+                }
             }
 
             let selected = false;

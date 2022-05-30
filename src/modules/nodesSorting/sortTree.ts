@@ -107,8 +107,10 @@ export const generateUniforms = (nodes) => {
     const uniforms = {};
 
     nodes.forEach((node, i) => {
-        console.log(node, node.controls);
         const curUniforms = {};
+
+        Object.assign(uniforms, node.uniforms);
+
         node.controls.forEach(control => {
             control.object = uniforms;
             curUniforms[control.field] = control.value;
@@ -117,12 +119,13 @@ export const generateUniforms = (nodes) => {
         Object.assign(uniforms, curUniforms);
 
         if (node instanceof Image) {
-            uniforms[`tex_${node.id}`] = node.bitmap.texture
-            // @ts-ignore
-            uniforms[`width_tex_${node.id}`] = node.bitmap.bitmap.width
-            // @ts-ignore
-            uniforms[`height_tex_${node.id}`] = node.bitmap.bitmap.height
+            node.controlUniforms = uniforms;
         }
+
+        Object.assign(uniforms, {
+            width: 2048,
+            height: 2048,
+        })
     });
 
     return uniforms;

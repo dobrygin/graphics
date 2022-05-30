@@ -103,7 +103,6 @@ export class Output extends IO<Output> {
 
   _disconnect(io: Input) {
     const index = this.connectedTo.indexOf(io);
-    console.log(index, '19231923')
     if (index !== -1) {
       this.connectedTo.splice(index, 1);
     }

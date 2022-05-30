@@ -18,6 +18,9 @@ import { NumberMath } from '../classes/math/NumberMath';
 import {Blend} from "../classes/nodes/mix/Blend";
 import '../global/styles/index.css';
 import {clamp} from "../utils/clamp";
+import {Number} from "../classes/nodes/input/Number";
+import {Time} from "../classes/nodes/input/Time";
+import {UVNode} from "../classes/nodes/input/UV";
 
 
 export const NodesView = observer(() => {
@@ -117,6 +120,9 @@ export const NodesView = observer(() => {
         </div>
         <div style={{ overflow: 'hidden', top: 0,
             left: 0, width: '50vw', height: '100vh', zIndex: '1', position: 'relative' }}>
+            <button onClick={() => addNode(Time)}>add time</button>
+            <button onClick={() => addNode(UVNode)}>add UV</button>
+            <button onClick={() => addNode(Number)}>add number input</button>
             <button onClick={() => addNode(Image)}>add img</button>
             <button onClick={() => addNode(Blend)}>add blend</button>
             <button onClick={() => addNode(BCS)}>add bcs</button>
