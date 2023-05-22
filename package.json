@@ -38,7 +38,6 @@
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
-    "@compiled/webpack-loader": "^0.8.7",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.7",
     "@types/react": "^17.0.38",
@@ -73,7 +72,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
-    "@compiled/react": "^0.10.4",
+    "@compiled/react": "^0.13.1",
+    "@compiled/webpack-loader": "^0.11.0",
     "@pixi/utils": "^6.2.2",
     "@types/pixi.js": "^5.0.0",
     "fast-png": "^6.1.0",
@@ -81,7 +81,7 @@
     "jpeg-js": "^0.4.3",
     "mobx": "^6.4.2",
     "mobx-react-lite": "^3.3.0",
-    "pixi.js": "^6.2.2",
+    "pixi.js": "^7.2.4",
     "tiff": "^5.0.3"
   }
 }

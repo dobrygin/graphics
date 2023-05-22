@@ -25,8 +25,14 @@ module.exports = {
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
-          "file-loader?hash=sha512&digest=hex&name=img/[contenthash].[ext]",
-          "image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false",
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true, // webpack@1.x
+              disable: true, // webpack@2.x and newer
+            },
+          },
         ],
       },
       {
@@ -35,6 +41,7 @@ module.exports = {
         use: [
           { loader: 'babel-loader' },
           {
+            // ↓↓ have to be defined last ↓↓
             loader: '@compiled/webpack-loader',
           },
         ],
